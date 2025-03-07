@@ -130,13 +130,6 @@ class DeepSeek():
         self.vector_store = None
         self.retriever = None
 
-    def paraphrase(self, text: str):
-        """
-        Paraphrase a given text.
-        """
-        logger.info(f"Paraphrasing text: {text}")
-        context = "You are a chatbot designed to paraphrase text to keep it's original meaning, while exluding any personal identifying information. Your task is to rephrase the given text in a different way while maintaining the original meaning, while maintaining the users privacy."
-        return self.model.invoke(text)
 
 
 if __name__ == "__main__":
@@ -149,8 +142,6 @@ if __name__ == "__main__":
         response = deepseek.ask(query)
         f.write(f"Question: {query}\n")
         f.write(f"Answer: {response}\n")"""
-    print(deepseek.paraphrase("My name is jonah wright and I am a software engineer. I would like to ask about how google handles my data."))
-    exit()
     while query != "exit":
         match mode: 
             case "1":
