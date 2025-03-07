@@ -130,17 +130,46 @@ class DeepSeek():
         self.vector_store = None
         self.retriever = None
 
+    def paraphrase(self, text: str):
+        """
+        Paraphrase a given text.
+        """
+        logger.info(f"Paraphrasing text: {text}")
+        context = "You are a chatbot designed to paraphrase text to keep it's original meaning, while exluding any personal identifying information. Your task is to rephrase the given text in a different way while maintaining the original meaning, while maintaining the users privacy."
+        return self.model.invoke(text)
+
 
 if __name__ == "__main__":
     deepseek = DeepSeek()
     deepseek.ingest("./pdf/google_privacy_policy_en_us.pdf")
-
+    mode = input("1. Ask Questions.\n2. Answer prewritten question suite and output result. \nSelect Mode:  ")
+    query = ""
     """ f = open("answers.txt", "w")
     for query in question_list:
         response = deepseek.ask(query)
         f.write(f"Question: {query}\n")
         f.write(f"Answer: {response}\n")"""
-    query = "Does the policy outline data collection practices?"
-    response = deepseek.ask(query)
-    print(response)
-    deepseek.clear()
+    print(deepseek.paraphrase("My name is jonah wright and I am a software engineer. I would like to ask about how google handles my data."))
+    exit()
+    while query != "exit":
+        match mode: 
+            case "1":
+                while True:
+                    query = input("Enter your question: ")
+                    if query.lower() == "exit":
+                        break
+                    response = deepseek.ask(query)
+                    print(response)
+            case "2":
+                f = open("answers.txt", "w")
+                for query in question_list:
+                    response = deepseek.ask(query)
+                    print(f"Question: {query}")
+                    print(f"Answer: {response}")
+                    f.write(f"Question: {query}\n")
+                    f.write(f"Answer: {response}\n")
+                f.close()
+                    
+            case _:
+                print("Invalid mode selected.")
+                mode = input("1. Ask Questions.\n2. Answer prewritten question suite and output result. \nSelect Mode:  ")
