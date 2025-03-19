@@ -7,14 +7,12 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema.runnable import RunnablePassthrough
 from langchain_community.vectorstores.utils import filter_complex_metadata
 from langchain_core.prompts import ChatPromptTemplate
-import logging
 import os
 
 set_debug(False)
 set_verbose(False)
 
-#logging.basicConfig(level=logging.INFO)
-#logger = logging.getLogger(__name__)
+
 
 question_list = [
 "Does the policy outline data collection practices?",
@@ -114,35 +112,11 @@ class DeepSeek():
     def ingest(self, file_path: str):
         #logger.info(f"Loading document from {file_path}")
         self.docs = PyPDFLoader(file_path=file_path).load()
-        """chunks = self.text_splitter.split_documents(docs)
-        chunks = filter_complex_metadata(chunks)
-        
-        self.vector_store = Chroma.from_documents(
-            documents=chunks,
-            embedding=self.embedding,
-            persist_directory="chroma_db"
-        )
-        logger.info("Ingestion completed. Document embeddings stored successfully.")"""
-    
 
     def ask(self, query: str, k: int = 5, score_threshold: float = 0.2):
         """
         Answer a query using the RAG pipeline.
         """
-        """if not self.vector_store:
-            raise ValueError("No vector store found. Please ingest a document first.")
-
-        if not self.retriever:
-            self.retriever = self.vector_store.as_retriever(
-                search_type="similarity_score_threshold",
-                search_kwargs={"k": k, "score_threshold": score_threshold},
-            )
-
-        logger.info(f"Retrieving context for query: {query}")
-        retrieved_docs = self.retriever.invoke(query)
-
-        if not retrieved_docs:
-            return "No relevant context found in the document to answer your question."""
 
         formatted_input = {
             "context": "\n\n".join(doc.page_content for doc in self.docs),
@@ -197,7 +171,17 @@ if __name__ == "__main__":
                     print(response)
             case "2":
                 count = 1
-                f = open(f"answers_{pdfs[select]}_para.txt", "w", encoding='utf-8')
+                f = open(f"answers_{pdfs[select]}.txt", "w", encoding='utf-8')
+                for query in question_list:
+                    response = deepseek.ask(query)
+                    print(f"Question: {query}")
+                    print(f"Answer: {response}")
+                    f.write(f"Question {count}: {query}\n")
+                    f.write(f"Answer: {response}\n")
+                    count += 1
+                f.close()
+                count = 1
+                f = open(f"answers_{pdfs[select]}_paraphrased.txt", "w", encoding='utf-8')
                 for query in paraphrased_questions:
                     response = deepseek.ask(query)
                     print(f"Question: {query}")

@@ -1,0 +1,28 @@
+Before this program can be used you must install ollama. 
+This can be found here: https://ollama.com/
+Once ollama is installed, it can be accessed in the command line by typing ollama. 
+To install deepseek-r1 to be run on your machine and used in the program run the following command: 
+ollama run deepseek-r1:latest
+This will install deepseek.
+
+
+Once deepseek is installed you can install the dependencies using the following command. 
+
+pip install -r /path/to/requirements.txt
+
+you will also have to install PyPDF manually, using the command:
+
+pip install pypdf
+
+Once the dependencies are installed you must create a folder in the same directory as main.py titled pdf. Inside here you must drop the PDFs of the privacy
+policies you want read. 
+
+Once the dependencies are installed and the folder is created with a policy, you can run the program as you would the a normal python program. 
+
+Here you select the privacy policy you want analyzed in the program. 
+
+Next you select if you want to run the benchmark questions, or ask your specific questions. 
+
+If you select the benchmark questions you must simply leave the program alone until the it exits, creating a .txt file with the questions and their answers. 
+
+If you select the option to ask questions, simply enter your question and wait for the result to be printed to the terminal. 
